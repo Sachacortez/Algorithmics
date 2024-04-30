@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+#define input freopen("in.txt","r",stdin)
+#define output freopen("out.txt","w",stdout)
+
+bool vis[10000];
+vector<int> graph[10000];
+
+void dfs(int first) {
+    stack<int> s;
+    s.push(first);
+    while(!s.empty()) {
+        int current = s.top();
+        s.pop();
+        if(!vis[current]) {
+            vis[current] = true;
+        }
+        for(int i = 0 ; i < graph[current].size(); i++) {
+            int buddy = graph[current][i];
+            if(!vis[buddy]) {
+                s.push(buddy);
+            }
+        }
+    }
+}
+
+int main() {
+    input;
+    int vertAmount, edgeAmount;
+    cin>>vertAmount>>edgeAmount;
+    for(int i = 0 ; i< edgeAmount; i++) {
+        int first, last;
+        cin>>first>>last;
+        graph[first].push_back(last);
+        graph[last].push_back(first);
+    }
+    int countGroups = 0;
+    for (int i = 1 ; i <= vertAmount; i++) {
+        if(!vis[i]) {
+            countGroups++;
+            dfs(i);
+        }
+    }
+    cout<<"The amount of groups is "<<countGroups<<endl;
+    return 0;
+}
